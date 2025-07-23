@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  web:
+    # 'build: .' tells Docker to look for the Dockerfile in the current directory
+    build: .
+    # The rest remains the same
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend/uploads:/app/uploads
+    environment:
+      - FLASK_ENV=production
+
+  nginx:
+    image: nginx:latest
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      # These paths are now correct relative to the docker-compose file in the root
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+      - ./backend/static:/usr/share/nginx/html/static
+    depends_on:
+      - web

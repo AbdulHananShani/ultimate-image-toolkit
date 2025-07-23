@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Processing Complete! - Ultimate Image Toolkit</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+    <div id="notification-box" class="notification-box">
+        <span id="notification-message"></span>
+    </div>
+    <div class="main-container">
+        <header>
+            <h1>Conversion Complete!</h1>
+            <p>Your file is ready to be downloaded.</p>
+            <p style="margin-top: 2rem;"><a href="/" style="text-decoration: none; color: #3498db;">&larr; Back to All
+                    Tools</a></p>
+        </header>
+
+        <main>
+            <div id="download-area" style="text-align: center;">
+                <h2>Your Processed File</h2>
+
+                {% if is_viewable %}
+                <img src="{{ url_for('view_file', filename=filename) }}" alt="Processed Image"
+                    style="max-width:100%; max-height:400px; margin-top:1rem; margin-bottom:1rem; border:1px solid #ccc;">
+                {% else %}
+                <div class="caution-box">
+                    <p><strong>Preview Not Available</strong></p>
+                    <p>Your browser cannot display a preview for <strong>{{ filename.split('.')[-1].upper() }}</strong>
+                        files, but your file was processed successfully and is ready for download.</p>
+                </div>
+                {% endif %}
+
+                <br>
+                <a href="{{ url_for('download_file', filename=filename) }}" class="download-button">Download {{ filename
+                    }}</a>
+            </div>
+        </main>
+    </div>
+</body>
+
+</html>

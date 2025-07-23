@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Processor - Ultimate Image Toolkit</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='main_style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+</head>
+
+<body>
+    <div id="notification-box" class="notification-box">
+        <span id="notification-message"></span>
+    </div>
+    {% include 'header.html' %}
+    <main class="tool-main-content">
+        <div class="compressor-container">
+            <div class="preview-panel">
+                <div id="image-upload-area">
+                    <label for="image-upload" class="upload-label"><span>Click to Upload an Image</span><input
+                            type="file" id="image-upload" accept="image/jpeg, image/png, image/webp"></label>
+                </div>
+                <div id="comparison-container" class="comparison-container" style="display: none;">
+                    <div id="comparison-slider-wrapper" class="comparison-slider-wrapper">
+                        <span id="reset-preview-btn" class="reset-preview-btn" style="display: none;"
+                            title="Choose a different image"><i class="fa fa-refresh" style="font-size:30px"></i></span>
+                        <img id="original-preview" src="#" alt="Original Image" class="comparison-image">
+                        <img id="processed-preview" src="#" alt="Processed Image"
+                            class="comparison-image comparison-top-image">
+                    </div>
+                    <input type="range" min="0" max="100" value="50" id="comparison-slider"
+                        class="comparison-slider-control">
+                </div>
+            </div>
+            <aside class="options-sidebar">
+                <div class="options-header">
+                    <a href="/" class="back-link">&larr; Back to All Tools</a>
+                </div>
+                <div class="options-body">
+                    <div class="options-group">
+                        <button class="accordion active">Resize</button>
+                        <div class="panel" style="max-height: fit-content;">
+                            <div class="info-group original-info" id="resize-original-info" style="display: none;">
+                                <div class="info-row"><span>Dimensions:</span><span
+                                        id="original-dimensions-resize">--</span></div>
+                            </div>
+                            <div class="control-group"><label for="resize-width">Width (px)</label><input type="number"
+                                    id="resize-width" placeholder="e.g., 1920"></div>
+                            <div class="control-group"><label for="resize-height">Height (px)</label><input
+                                    type="number" id="resize-height" placeholder="e.g., 1080"></div>
+                            <div class="control-group checkbox-group"><input type="checkbox" id="aspect-ratio-toggle"
+                                    checked><label for="aspect-ratio-toggle">Maintain aspect ratio</label></div>
+                            <div class="control-group"><button id="reset-resize-button"
+                                    class="reset-button">Reset</button></div>
+                        </div>
+                    </div>
+                    <div class="options-group">
+                        <button class="accordion active">Compress</button>
+                        <div class="panel" style="max-height: fit-content;">
+                            <div class="info-group original-info" id="compress-original-info" style="display: none;">
+                                <div class="info-row"><span>Original Size:</span><span
+                                        id="original-size-compress">--</span></div>
+                            </div>
+                            <div class="control-group"><label for="quality-slider">Quality: <span
+                                        id="quality-value">100</span></label><input type="range" id="quality-slider"
+                                    min="1" max="100" value="100"></div>
+                            <div class="control-group"><button id="reset-compress-button"
+                                    class="reset-button">Reset</button></div>
+                        </div>
+                    </div>
+                    <button id="process-button" class="action-button">Generate Image</button>
+                    <div id="size-info-area" class="info-group" style="display: none;">
+                        <h4>Last Operation Result</h4>
+                        <div class="info-row"><span>Original Size:</span><span id="original-size">--</span></div>
+                        <div class="info-row"><span>New Size:</span><span id="processed-size">--</span></div>
+                        <div class="info-row savings"><span>Savings:</span><span id="savings-percent">--</span></div>
+                    </div>
+                    <div id="download-area" style="display:none; margin-top: 1rem;">
+                        <button id="download-button" class="download-button" style=" margin-top: 1rem;">Download Latest Image</button>
+                        <a id="hidden-download-link" href="#" style="display: none;"></a>
+                    </div>
+                </div>
+            </aside>
+        </div>
+    </main>
+    {% include 'footer.html' %}
+    <script src="{{ url_for('static', filename='compressor_script.js') }}"></script>
+</body>
+
+</html>
