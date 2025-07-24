@@ -17,4 +17,4 @@ COPY ./backend/ .
 EXPOSE 8000
 
 # The command to start the Gunicorn production server
-CMD ["gunicorn", "--workers", "3", "--bind", "0.0.0.0:8000", "app:app"]
+CMD ["gunicorn", "--bind", "0.0.0.0:${PORT}", "--workers", "3", "app:app"]
