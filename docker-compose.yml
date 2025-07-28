@@ -1,12 +1,11 @@
 services:
   web:
     build: .
-    expose:
-      - 8000
     volumes:
       - ./backend/uploads:/app/uploads
     environment:
       - FLASK_ENV=production
+    # We don't need to expose the port here, Nginx will handle it
 
   nginx:
     image: nginx:latest
@@ -18,3 +17,5 @@ services:
       - ./backend/uploads:/app/uploads
     depends_on:
       - web
+    # FIX: Add a command to ensure Nginx starts correctly
+    command: [nginx, '-g', 'daemon off;']
