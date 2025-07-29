@@ -3,24 +3,14 @@ services:
     build: .
     volumes:
       - ./backend/uploads:/app/uploads
-    expose:
-      - "8000"
-    environment:
-      - FLASK_ENV=production
 
   nginx:
     image: nginx:latest
     ports:
       - "80:80"
-      - "443:443"
     volumes:
       - ./nginx.conf:/etc/nginx/conf.d/default.conf
       - ./backend/static:/var/www/static
       - ./backend/uploads:/var/www/uploads
-      - /etc/letsencrypt:/etc/letsencrypt:ro
-      # --- START: FIX - Add a volume for Certbot renewal challenges ---
-      - ./certbot/www:/var/www/certbot:ro
-      # --- END: FIX ---
     depends_on:
       - web
-    command: [nginx, '-g', 'daemon off;']
