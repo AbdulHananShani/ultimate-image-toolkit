@@ -16,7 +16,7 @@ services:
       - ./backend/uploads:/var/www/uploads
     depends_on:
       - web
-    certbot:
+  certbot:
       image: certbot/certbot
       volumes:
         - ./data/certbot/conf:/etc/letsencrypt
