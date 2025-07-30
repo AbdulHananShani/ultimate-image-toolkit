@@ -1,52 +1,30 @@
-# Defines the list of services (containers) that make up your application.
 services:
-
-  # --- The Python/Flask Application Service ---
   web:
-    # Tells Docker to build this container from the 'Dockerfile' in the current directory.
     build: .
     volumes:
-      # Links the 'uploads' folder on your server to a folder inside the container.
-      # This is crucial for making sure uploaded files are not lost when the app restarts.
       - ./backend/uploads:/app/uploads
     environment:
-      # Sets an environment variable inside the container to run Flask in production mode.
       - FLASK_ENV=production
 
-  # --- The Nginx Web Server Service ---
   nginx:
-    # Tells Docker to use the latest official 'nginx' image from Docker Hub.
     image: nginx:latest
     ports:
-      # Connects your server's public ports to the ports inside the Nginx container.
-      # Format is "HOST:CONTAINER". This makes your website visible to the internet.
-      - "80:80"   # HTTP traffic
-      - "443:443" # HTTPS traffic
+      - "80:80"
+      - "443:443"
     volumes:
-      # These lines give the Nginx container access to important files from your server.
-      # Mounts your custom nginx.conf file into the container's configuration directory.
       - ./nginx.conf:/etc/nginx/conf.d/default.conf
-      # Gives Nginx read-only access to your SSL certificate files.
+      # This single line gives Nginx read-only access to all cert files, including dhparam.pem
       - ./data/certbot/conf:/etc/letsencrypt:ro
-      # Gives Nginx read-only access to the folder Certbot uses for renewal challenges.
-      - ./data/certbot/www:/var/www/certbot:ro
-      # Gives Nginx read-only access to the file needed for extra SSL security.
-      - ./data/nginx/dhparam.pem:/etc/letsencrypt/ssl-dhparams.pem:ro
-      # Gives Nginx direct access to serve your static files (CSS/JS).
+      - ./data/certbot/www:/var/www/certbot
       - ./backend/static:/var/www/static
-      # Gives Nginx direct access to serve user-uploaded images.
       - ./backend/uploads:/var/www/uploads
     depends_on:
-      # A critical instruction: tells Docker to always start the 'web' service first
-      # and wait for it to be running before starting the 'nginx' service.
       - web
+    command: [nginx, '-g', 'daemon off;']
 
-  # --- The Certbot SSL Certificate Service ---
   certbot:
-    # Tells Docker to use the official 'certbot' image from Docker Hub.
     image: certbot/certbot
     volumes:
-      # Gives the Certbot container access to the folders where it needs to
-      # save the certificate files and the renewal challenge files.
+      # These two volumes give Certbot write access to create the files
       - ./data/certbot/conf:/etc/letsencrypt
       - ./data/certbot/www:/var/www/certbot
