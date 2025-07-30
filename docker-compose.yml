@@ -1,26 +1,42 @@
+# This line defines a group of services that will run together.
 services:
+
+  # This is the definition for our Python/Flask application container.
+  # We've nicknamed it 'web'.
   web:
+    # 'build: .' tells Docker Compose to look for a 'Dockerfile' in the current
+    # directory and use it to build the container for this service.
     build: .
     volumes:
+      # This creates a link (a "volume") between a folder on your server and a folder inside the container.
+      # It links your local './backend/uploads' folder to the '/app/uploads' folder inside the container.
+      # This is crucial so that files saved by your app don't get deleted when the container restarts.
       - ./backend/uploads:/app/uploads
     environment:
+      # This sets an environment variable inside the container.
+      # It tells Flask to run in a more secure and efficient 'production' mode.
       - FLASK_ENV=production
+
+  # This is the definition for our Nginx web server container.
+  # We've nicknamed it 'nginx'.
   nginx:
+    # This tells Docker to pull the official 'nginx' image from Docker Hub.
     image: nginx:latest
     ports:
+      # This connects the ports between the server and the container.
+      # It maps port 80 on your Linode server to port 80 inside the Nginx container.
+      # This is what makes your website visible to the public internet.
       - "80:80"
-      - "443:443"
     volumes:
+      # This links your local nginx.conf file to the correct location inside the container,
+      # allowing it to use our custom configuration.
       - ./nginx.conf:/etc/nginx/conf.d/default.conf
-      - ./data/certbot/conf:/etc/letsencrypt
-      - ./data/certbot/www:/var/www/certbot
-      - ./data/nginx/dhparam.pem:/etc/letsencrypt/ssl-dhparams.pem
+      # This gives the Nginx container direct, read-only access to your static files (CSS, JS).
+      # Serving them directly with Nginx is much faster than going through Python.
       - ./backend/static:/var/www/static
-      - ./backend/uploads:/app/uploads
+      # This gives Nginx access to the user-uploaded images so it can serve them for previews.
+      - ./backend/uploads:/var/www/uploads
     depends_on:
+      # This is a critical instruction. It tells Docker Compose to always start the
+      # 'web' (Python) container first and wait for it to be running before starting 'nginx'.
       - web
-  certbot:
-      image: certbot/certbot
-      volumes:
-        - ./data/certbot/conf:/etc/letsencrypt
-        - ./data/certbot/www:/var/www/certbot  
