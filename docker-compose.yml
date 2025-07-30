@@ -17,6 +17,8 @@ services:
       - /etc/letsencrypt:/etc/letsencrypt:ro
       - ./backend/static:/var/www/static
       - ./backend/uploads:/var/www/uploads
+      - ./data/certbot/conf:/etc/letsencrypt:ro
+      - ./data/certbot/www:/var/www/certbot
       # END: FIX
     depends_on:
       - web
