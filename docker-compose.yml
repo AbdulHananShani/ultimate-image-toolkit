@@ -16,6 +16,7 @@ services:
       - ./data/certbot/conf:/etc/letsencrypt:ro
       - ./backend/static:/var/www/static
       - ./backend/uploads:/var/www/uploads
+      - ./data/certbot/www:/var/www/certbot
     depends_on:
       - web
     command: [nginx, '-g', 'daemon off;']
