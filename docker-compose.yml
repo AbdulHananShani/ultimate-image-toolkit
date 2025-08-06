@@ -1,3 +1,5 @@
+version: '3.8'
+
 services:
   web:
     build: .
@@ -10,9 +12,9 @@ services:
     image: nginx:latest
     ports:
       - "80:80"
+      - "443:443"
     volumes:
       - ./nginx.conf:/etc/nginx/conf.d/default.conf
-      - ./backend/static:/var/www/static
-      - ./backend/uploads:/var/www/uploads
+      - ./data/certs:/etc/nginx/certs
     depends_on:
       - web
