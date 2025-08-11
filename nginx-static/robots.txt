@@ -1,0 +1,18 @@
+# robots.txt for pixlyze.com
+# --------------------------
+# Purpose: Allow search engines to index all public pages,
+# block admin/API endpoints, and point them to the sitemap.
+
+User-agent: *
+# Block admin pages
+Disallow: /admin/
+# Block API endpoints
+Disallow: /api/
+# Block static development/debug paths (if any)
+Disallow: /static/debug/
+
+# Allow everything else
+Allow: /
+
+# Sitemap location (important for SEO)
+Sitemap: https://pixlyze.com/sitemap.xml
