@@ -22,7 +22,7 @@ services:
       - ./data/certs/cloudflare.key:/etc/ssl/private/cloudflare.key:ro
       - ./nginx-static/robots.txt:/etc/nginx/html/robots.txt:ro
       - ./nginx-static/sitemap.xml:/etc/nginx/html/sitemap.xml:ro
-      - ./backend/static:/app/static
+      # - ./backend/static:/app/static
 
     depends_on:
       - web
